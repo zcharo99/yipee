@@ -1,0 +1,110 @@
+#!/bin/bash
+# yipee aur helper source code
+# completely made in bash
+
+clonerepo() {
+  echo ":: Cloning repository..."
+  git clone https://aur.archlinux.org/${OPTARG}.git ${repopath}/${OPTARG} > /dev/null 2>&1
+  if [ $? -eq 0 ]; then
+    echo ":: Repository successfully cloned!"
+  else
+    echo "!! Error: Repository didn't clone successfully, exiting with code 1" >&2
+    exit 1
+  fi
+}
+buildpkg() {
+  echo ":: Building package..."
+  local args="$1"
+  cd "$HOME/.local/share/yipee/repos/${OPTARG}/"
+  makepkg -${args}
+}
+freshinstall() {
+  removerepofolder
+  clonerepo
+  buildpkg "si"
+}
+removerepofolder() {
+  rm -r ${repopath}/${OPTARG}
+  echo ":: Repository folder removed"
+}
+ctrl_c() {
+  echo "!! SIGINT recieved, stopping now..."
+  exit 1
+}
+
+trap ctrl_c SIGINT
+
+baseFolder="$HOME/.local/share/yipee/"
+firstTimeFile="$HOME/.local/share/yipee/firsttime"
+
+if [ ! -f ${firstTimeFile} ]; then
+  mkdir -p $(dirname ${firstTimeFile})
+  mkdir -p ${baseFolder}
+fi
+
+# check if more than one flag is used
+if [ "$#" -gt 2 ]; then
+  echo "!! Invalid: multiple flags cannot be used together" >&2
+  exit 1
+fi
+
+# process the flags
+while getopts ":S::R:" flag; do
+  case "${flag}" in
+    S)
+      if [ -z "${OPTARG}" ]; then
+        pacman -Sy
+      else
+	repopath="$HOME/.local/share/yipee/repos"
+	response=$(curl -s "https://aur.archlinux.org/rpc/?v=5&type=info&arg=${OPTARG}")
+        if [[ "$response" == *'"resultcount":1,'* ]]; then
+	  if [ -d "$repopath" ]; then
+	    echo "pkgbuild path already exists, delete or install from the existing pkgbuild?"
+	    read -rp "[i]nstall or [D]elete: " answer
+	    answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
+
+	    case "$answer" in
+	      ""d|D|delete|Delete)
+	        echo "deleting and installing freshly..."
+		freshinstall
+		;;
+	      i|I|install)
+		echo "using existing folder..."
+		buildpkg "si"
+		;;
+	      *)
+		echo "error: invalid option" >&2
+		exit 1
+		;;
+	    esac
+	  else
+	    mkdir -p ${repopath}
+	    clonerepo
+	    buildpkg "si"
+	  fi
+	  
+        else
+	  echo "!! Error: AUR package does not exist" >&2
+	  exit 1
+	fi
+      fi
+      echo ":: Done"
+      ;;
+    R)
+      if [ -z "${OPTARG}" ]; then
+        echo "invalid: -R requires a valid package name"
+      else
+        pacman -R ${OPTARG}  # uncomment this line to actually run the command
+      fi
+      ;;
+    *)
+      echo "invalid option: -${OPTARG}"
+      ;;
+  esac
+done
+
+# check if no flags were passed
+if [ $OPTIND -eq 1 ]; then
+  echo "invalid: no flags provided"
+fi
+
