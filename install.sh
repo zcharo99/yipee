@@ -3,6 +3,7 @@ checkpkg() {
   pacman -Q "$1" &>/dev/null
 }
 
+sudo rm -f /usr/bin/yipee &>/dev/null
 mkdir -p $HOME/.local/share/yipee
 curl https://raw.githubusercontent.com/zcharo99/yipee/main/aur > yipee
 echo ""
