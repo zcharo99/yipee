@@ -105,6 +105,6 @@ done
 
 # check if no flags were passed
 if [ $OPTIND -eq 1 ]; then
-  echo "invalid: no flags provided"
+  sudo pacman -Syu
 fi
 
