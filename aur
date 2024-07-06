@@ -71,21 +71,21 @@ while getopts ":S::R:" flag; do
 	response=$(curl -s "https://aur.archlinux.org/rpc/?v=5&type=info&arg=${OPTARG}")
         if [[ "$response" == *'"resultcount":1,'* ]]; then
 	  if [ -d "$repopath" ]; then
-	    echo "pkgbuild path already exists, delete or install from the existing pkgbuild?"
+	    echo ":: PKGBUILD path already exists, delete or install from the existing pkgbuild?"
 	    read -rp "[i]nstall or [D]elete: " answer
 	    answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
 
 	    case "$answer" in
 	      ""d|D|delete|Delete)
-	        echo "deleting and installing freshly..."
+	        echo ":: Deleting and installing freshly..."
 		freshinstall
 		;;
 	      i|I|install)
-		echo "using existing folder..."
+		echo ":: Using existing folder..."
 		buildpkg "si"
 		;;
 	      *)
-		echo "error: invalid option" >&2
+		echo "?? Invalid option"
 		exit 1
 		;;
 	    esac
