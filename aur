@@ -94,11 +94,10 @@ while getopts ":S::R:" flag; do
 	    clonerepo
 	    buildpkg "si"
 	  fi
-	  
         else
-	  		echo "!! Error: AUR package does not exist" >&2
-	  			exit 1
-				fi
+	  echo "!! Error: AUR package does not exist" >&2
+	  exit 1
+	fi
       fi
       ;;
     R)
