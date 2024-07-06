@@ -8,22 +8,22 @@ version="0.1"
 onlineversion=$(curl https://raw.githubusercontent.com/zcharo99/yipee/main/version)
 
 if [ ! -f ${updater} ]; then
-  	touch "${baseFolder}/updater"
-	chmod +x "${baseFolder}/updater"
+  	touch "${baseFolder}updater"
+	chmod +x "${baseFolder}updater"
 	echo "#!/bin/bash \
 	# yipee updater in bash \
-	curl https://raw.githubusercontent.com/zcharo99/yipee/main/aur > $HOME/.local/yipee \
+	curl https://raw.githubusercontent.com/zcharo99/yipee/main/aur > ${baseFolder}yipee \
 	sudo rm -f /usr/bin/yipee \
 	killall yipee \
-	sudo mv $HOME/.local/yipee /usr/bin/ \
-	echo ':: Successfully updated!' "
+	sudo mv ${baseFolder}yipee /usr/bin/ \
+	echo ':: Successfully updated!' " > ${baseFolder}updater
 fi
 
 checkupdates() {
 	echo ":: Checking for updates..."
 	if [ "$version" != "$onlineversion ] then
 		echo ":: Update found, updating now."
-		
+		${baseFolder}updater
 	else
 		echo ":: No update found."
 	fi
@@ -78,7 +78,8 @@ while getopts ":S::R:" flag; do
   case "${flag}" in
     S)
       if [ -z "${OPTARG}" ]; then
-        pacman -Sy
+	checkupdates
+        pacman -Syu
       else
 	repopath="$HOME/.local/share/yipee/repos"
 	response=$(curl -s "https://aur.archlinux.org/rpc/?v=5&type=info&arg=${OPTARG}")
