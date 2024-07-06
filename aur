@@ -70,7 +70,7 @@ while getopts ":S::R:" flag; do
 	repopath="$HOME/.local/share/yipee/repos"
 	response=$(curl -s "https://aur.archlinux.org/rpc/?v=5&type=info&arg=${OPTARG}")
         if [[ "$response" == *'"resultcount":1,'* ]]; then
-	  if [ -d "$repopath" ]; then
+	  if [ -d "${repopath}/${OPTARG}" ]; then
 	    echo ":: PKGBUILD path already exists, delete or install from the existing pkgbuild?"
 	    read -rp "[i]nstall or [D]elete: " answer
 	    answer=$(echo "$answer" | tr '[:upper:]' '[:lower:]')
