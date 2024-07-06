@@ -5,10 +5,10 @@
 baseFolder="$HOME/.local/share/yipee/"
 updater="$HOME/.local/share/yipee/updater"
 version="0.1"
-onlineversion=$(curl https://raw.githubusercontent.com/zcharo99/yipee/main/version)
+onlineversion=$(curl -s https://raw.githubusercontent.com/zcharo99/yipee/main/version)
 
 if [ ! -f ${updater} ]; then
-  	curl https://raw.githubusercontent.com/zcharo99/yipee/main/updater > ${baseFolder}updater
+  	curl -s https://raw.githubusercontent.com/zcharo99/yipee/main/updater > ${baseFolder}updater
 	chmod +x "${baseFolder}updater"
 fi
 
