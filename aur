@@ -4,7 +4,7 @@
 
 baseFolder="$HOME/.local/share/yipee/"
 updater="$HOME/.local/share/yipee/updater"
-version="0.1"
+version="0.11"
 onlineversion=$(curl -s https://raw.githubusercontent.com/zcharo99/yipee/main/version)
 
 if [ ! -f ${updater} ]; then
