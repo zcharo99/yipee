@@ -1,0 +1,7 @@
+#!/bin/bash
+# yipee updater in bash
+curl https://raw.githubusercontent.com/zcharo99/yipee/main/aur > ${baseFolder}yipee
+sudo rm -f /usr/bin/yipee
+killall yipee
+sudo mv ${baseFolder}yipee /usr/bin/
+echo ":: Successfully updated!"
