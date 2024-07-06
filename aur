@@ -16,7 +16,7 @@ checkupdates() {
   echo ":: Checking for updates..."
   if [ "$version" != "$onlineversion" ]; then
     echo ":: Update found, updating now."
-    ${baseFolder}updater
+    bash ${baseFolder}updater
   else
     echo ":: No update found."
   fi
