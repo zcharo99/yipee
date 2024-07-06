@@ -60,13 +60,6 @@ ctrl_c() {
 
 trap ctrl_c SIGINT
 
-if [ ! -f ${updater} ]; then
-  touch "${baseFolder}/updater"
-	chmod +x "${baseFolder}/updater"
-	echo "#!/bin/bash \
-				# yipee updater
-fi
-
 # check if more than one flag is used
 if [ "$#" -gt 2 ]; then
   echo "!! Invalid: multiple flags cannot be used together" >&2
