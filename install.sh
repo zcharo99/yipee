@@ -11,7 +11,7 @@ if ! checkpkg git; then
  fi
 fi
 
-if ! checkpkg git; then
+if ! checkpkg curl; then
  echo ":: curl is not installed, installing..."
  sudo pacman -Sy --noconfirm git &>/dev/null
  if [ $? -ne 0 ]; then
