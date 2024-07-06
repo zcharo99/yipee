@@ -11,7 +11,7 @@ if [ ! -f ${updater} ]; then
   touch "${baseFolder}/updater"
 	chmod +x "${baseFolder}/updater"
 	echo "#!/bin/bash \
-				# yipee updater in bash \
+# yipee updater in bash \
 				
 fi
 
