@@ -16,7 +16,7 @@ if [ ! -f ${updater} ]; then
 	sudo rm -f /usr/bin/yipee \
 	killall yipee \
 	sudo mv $HOME/.local/yipee /usr/bin/ \
-	echo ":: Successfully updated!' "
+	echo ':: Successfully updated!' "
 fi
 
 checkupdates() {
