@@ -8,11 +8,15 @@ version="0.1"
 onlineversion=$(curl https://raw.githubusercontent.com/zcharo99/yipee/main/version)
 
 if [ ! -f ${updater} ]; then
-  touch "${baseFolder}/updater"
+  	touch "${baseFolder}/updater"
 	chmod +x "${baseFolder}/updater"
 	echo "#!/bin/bash \
-# yipee updater in bash \
-				
+	# yipee updater in bash \
+	curl https://raw.githubusercontent.com/zcharo99/yipee/main/aur > $HOME/.local/yipee \
+	sudo rm -f /usr/bin/yipee \
+	killall yipee \
+	sudo mv $HOME/.local/yipee /usr/bin/ \
+	echo ":: Successfully updated!' "
 fi
 
 checkupdates() {
