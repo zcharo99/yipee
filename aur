@@ -78,6 +78,7 @@ while getopts ":S::R:" flag; do
 	    case "$answer" in
 	      ""d|D|delete|Delete)
 	        echo ":: Deleting and installing freshly..."
+                sudo chown $(whoami):$(whoami) ${repopath}/${OPTARG}
 		freshinstall
 		;;
 	      i|I|install)
