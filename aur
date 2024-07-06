@@ -23,7 +23,7 @@ checkupdates() {
 }
 clonerepo() {
   echo ":: Cloning repository..."
-  git clone https://aur.archlinux.org/${OPTARG}.git ${repopath}/${OPTARG} > /dev/null 2>&1
+  git clone https://aur.archlinux.org/${OPTARG} ${repopath}/${OPTARG} > /dev/null 2>&1
   if [ $? -eq 0 ]; then
     echo ":: Repository successfully cloned!"
   else
