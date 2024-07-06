@@ -104,7 +104,26 @@ while getopts ":S::R:" flag; do
       if [ -z "${OPTARG}" ]; then
         echo "?? Invalid: -R requires a valid package name"
       else
-        pacman -R ${OPTARG}  # uncomment this line to actually run the command
+	if [ -d ${repopath}/${OPTARG} ]; then
+          echo ":: Uninstalling package and PKGBUILD..."
+          rm -rf "${repopath}/${OPTARG}"
+          pacman --noconfirm -R ${OPTARG} &>/dev/null
+          if [ $? -eq 0 ]; then
+            echo ":: Package uninstalled successfully."
+          else
+            echo "!! Error: Package did not uninstall correctly." >&2
+            exit 1
+          fi
+        else
+          echo "!! Error: \"${repopath}/${OPTARG}\" does not exist. Uninstalling only the package..."
+          pacman --noconfirm -R ${OPTARG} &>/dev/null
+          if [ $? -eq 0 ]; then
+            echo ":: Package uninstalled successfully."
+          else
+            echo "!! Error: Package did not uninstall correctly." >&2
+            exit 1
+          fi
+        fi
       fi
       ;;
     *)
