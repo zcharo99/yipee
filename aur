@@ -2,6 +2,28 @@
 # yipee aur helper source code
 # completely made in bash
 
+baseFolder="$HOME/.local/share/yipee/"
+updater="$HOME/.local/share/yipee/updater"
+version="0.1"
+onlineversion=$(curl https://raw.githubusercontent.com/zcharo99/yipee/main/version)
+
+if [ ! -f ${updater} ]; then
+  touch "${baseFolder}/updater"
+	chmod +x "${baseFolder}/updater"
+	echo "#!/bin/bash \
+				# yipee updater in bash \
+				
+fi
+
+checkupdates() {
+	echo ":: Checking for updates..."
+	if [ "$version" != "$onlineversion ] then
+		echo ":: Update found, updating now."
+		
+	else
+		echo ":: No update found."
+	fi
+}
 clonerepo() {
   echo ":: Cloning repository..."
   git clone https://aur.archlinux.org/${OPTARG}.git ${repopath}/${OPTARG} > /dev/null 2>&1
@@ -34,12 +56,11 @@ ctrl_c() {
 
 trap ctrl_c SIGINT
 
-baseFolder="$HOME/.local/share/yipee/"
-firstTimeFile="$HOME/.local/share/yipee/firsttime"
-
-if [ ! -f ${firstTimeFile} ]; then
-  mkdir -p $(dirname ${firstTimeFile})
-  mkdir -p ${baseFolder}
+if [ ! -f ${updater} ]; then
+  touch "${baseFolder}/updater"
+	chmod +x "${baseFolder}/updater"
+	echo "#!/bin/bash \
+				# yipee updater
 fi
 
 # check if more than one flag is used
@@ -84,27 +105,28 @@ while getopts ":S::R:" flag; do
 	  fi
 	  
         else
-	  echo "!! Error: AUR package does not exist" >&2
-	  exit 1
-	fi
+	  		echo "!! Error: AUR package does not exist" >&2
+	  			exit 1
+				fi
       fi
-      echo ":: Done"
       ;;
     R)
       if [ -z "${OPTARG}" ]; then
-        echo "invalid: -R requires a valid package name"
+        echo "?? Invalid: -R requires a valid package name"
       else
         pacman -R ${OPTARG}  # uncomment this line to actually run the command
       fi
       ;;
     *)
-      echo "invalid option: -${OPTARG}"
+      echo "?? Invalid option: -${OPTARG}"
+      exit 1
       ;;
   esac
 done
 
 # check if no flags were passed
 if [ $OPTIND -eq 1 ]; then
+  checkupdates
   sudo pacman -Syu
 fi
 
