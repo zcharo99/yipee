@@ -16,7 +16,7 @@ if [ ! -f ${updater} ]; then
 	sudo rm -f /usr/bin/yipee \
 	killall yipee \
 	sudo mv ${baseFolder}yipee /usr/bin/ \
-	echo \":: Successfully updated!\"" > ${baseFolder}updater
+	echo \":: Successfully updated!\"" > "${baseFolder}updater"
 fi
 
 checkupdates() {
